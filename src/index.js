@@ -1,24 +1,7 @@
-// require('dotenv').config();
-
-// const Discord = require('discord.js');
-// const ytdl = require('ytdl-core');
-// const client = new Discord.Client();
-// const sauce = ['karaoke', 'baka mitai', 'fly me to the moon'];
-
-// client.on('ready', () => {
-//     console.log('Sharrrrrk -gawr gura');
-// });
-
-// client.on('message', (msg) => {
-    
-//     if (msg.content === '!shrimp') 
-//         msg.channel.send('-p gawr gura baka mitai');
-// })
-
-// client.login(process.env.D_TOKEN);
-
 const Discord = require("discord.js");
+
 require('dotenv').config();
+
 const prefix = '!';
 const token = process.env.D_TOKEN;
 
