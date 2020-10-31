@@ -189,19 +189,53 @@ const songs =
                     url: 'https://www.youtube.com/watch?v=pZZQfYBDtUI'
                 },
             },
+        ],
+        andrews_mix: [
             {
                 song: {
-                    title: 'Mining',
-                    url: 'https://www.youtube.com/watch?v=weDCDL0e5Fc'
+                    title: 'Putin\'s Boner',
+                    url: 'https://www.youtube.com/watch?v=9QQo77PlJ0g'
                 },
             },
-
+            {
+                song: {
+                    title: 'Schrodinger\'s Boner',
+                    url: 'https://www.youtube.com/watch?v=TEgdg7TFtLw'
+                },
+            },
+            {
+                song: {
+                    title: 'Moskau',
+                    url: 'https://www.youtube.com/watch?v=NvS351QKFV4'
+                },
+            },
+        ],
+        anik: [
+            {
+                song: {
+                    title: 'Rainfall',
+                    url: 'https://www.youtube.com/watch?v=tYEoP8facUg'
+                },
+            },
+        ],
+        sango: [
+            {
+                song: {
+                    title: 'Bloody Stream',
+                    url: 'https://www.youtube.com/watch?v=RZhGITHIbns'
+                }
+            }
         ]
+            
+        
     }
 
 const artists = {
     shrimp: 'gawr_gura',
-    wanker: 'amelia_watson'
+    wanker: 'amelia_watson',
+    andrew: 'andrews_mix',
+    anik: 'anik',
+    sango: 'sango'
 }
 
 exports.songs = songs;

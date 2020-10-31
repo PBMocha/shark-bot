@@ -2,7 +2,7 @@ const Discord = require("discord.js");
 
 require('dotenv').config();
 
-const prefix = '!';
+const prefix = '~';
 const token = process.env.D_TOKEN;
 
 const ytdl = require("ytdl-core");
@@ -30,8 +30,7 @@ client.on("message", async message => {
   if (!message.content.startsWith(prefix)) return;
 
   const serverQueue = queue.get(message.guild.id);
-
-  if (message.content.startsWith(`${prefix}shrimp`) || message.content.startsWith(`${prefix}wanker`)) {
+  if (isMessageCommandToPlaySong(message)) {
     execute(message, serverQueue);
     return;
   } else if (message.content.startsWith(`${prefix}skip`)) {
@@ -48,10 +47,21 @@ client.on("message", async message => {
   }
 });
 
+const isMessageCommandToPlaySong = (message) => {
+  let isMatch = false;
+  const artistKeys = Object.keys(commandToArtist);
+  for (let i = 0; i < artistKeys.length; i++) {
+    if (message.content.startsWith(`${prefix}${artistKeys[i]}`)) {
+      isMatch = true;
+    }
+  }
+  return isMatch;
+}
+
 async function execute(message, serverQueue) {
   const args = message.content.split(" ");
   let artistCommand = args[0]
-  artistCommand = artistCommand.replace('!', '')
+  artistCommand = artistCommand.replace(prefix, '')
   const artist = commandToArtist[artistCommand]
   const voiceChannel = message.member.voice.channel;
   if (!voiceChannel)
@@ -125,10 +135,7 @@ function play(guild, song) {
   }
 
   const dispatcher = serverQueue.connection
-    .play(ytdl(song.url), {
-      quality: 'highestaudio',
-      highWaterMark: 1 << 25
-    })
+    .play(ytdl(song.url, {filter: 'audioonly', quality: 'highestaudio', highWaterMark: 1<<25 }), {highWaterMark: 1})
     .on("finish", () => {
       serverQueue.songs.shift();
       play(guild, serverQueue.songs[0]);
