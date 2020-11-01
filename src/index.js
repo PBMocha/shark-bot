@@ -2,7 +2,7 @@ const Discord = require("discord.js");
 
 require('dotenv').config();
 
-const prefix = '!';
+const prefix = '~';
 const token = process.env.D_TOKEN;
 
 const ytdl = require("ytdl-core");
@@ -10,6 +10,8 @@ const ytdl = require("ytdl-core");
 const client = new Discord.Client();
 
 const queue = new Map();
+const songs = require('./songs').songs;
+const commandToArtist = require('./songs').artists;
 
 client.once("ready", () => {
   console.log("Ready!");
@@ -28,14 +30,13 @@ client.on("message", async message => {
   if (!message.content.startsWith(prefix)) return;
 
   const serverQueue = queue.get(message.guild.id);
-
-  if (message.content.startsWith(`${prefix}shrimp`)) {
+  if (isMessageCommandToPlaySong(message)) {
     execute(message, serverQueue);
     return;
   } else if (message.content.startsWith(`${prefix}skip`)) {
     skip(message, serverQueue);
     return;
-  } else if (message.content.startsWith(`${prefix}stop`)) {
+  } else if (message.content.startsWith(`${prefix}remove`)) {
     stop(message, serverQueue);
     return;
   } else if (message.content.startsWith(`${prefix}bonk`)) {
@@ -46,8 +47,22 @@ client.on("message", async message => {
   }
 });
 
+const isMessageCommandToPlaySong = (message) => {
+  let isMatch = false;
+  const artistKeys = Object.keys(commandToArtist);
+  for (let i = 0; i < artistKeys.length; i++) {
+    if (message.content.startsWith(`${prefix}${artistKeys[i]}`)) {
+      isMatch = true;
+    }
+  }
+  return isMatch;
+}
+
 async function execute(message, serverQueue) {
-  // const args = message.content.split(" ");
+  const args = message.content.split(" ");
+  let artistCommand = args[0]
+  artistCommand = artistCommand.replace(prefix, '')
+  const artist = commandToArtist[artistCommand]
   const voiceChannel = message.member.voice.channel;
   if (!voiceChannel)
     return message.channel.send(
@@ -60,109 +75,8 @@ async function execute(message, serverQueue) {
     );
   }
 
-  const songs = [
-    {
-      song: {
-        title: 'Ride On Time',
-        url: 'https://www.youtube.com/watch?v=NcOLcQJmm5M'
-      },
-    },
-    {
-      song: {
-        title: 'Koi',
-        url: 'https://www.youtube.com/watch?v=FDC6rfdnjIM'
-      },
-    },
-    {
-      song: {
-        title: 'Ke Sera Sera',
-        url: 'https://www.youtube.com/watch?v=riY11Uh9wH0'
-      },
-    },
-    {
-      song: {
-        title: 'Judgement',
-        url: 'https://www.youtube.com/watch?v=UiMgeKJMV2U'
-      },
-    },
-    {
-      song: {
-        title: 'Fly Me To The Moon',
-        url: 'https://www.youtube.com/watch?v=82T8yOG5MTk'
-      },
-    },
-    {
-      song: {
-        title: 'Bloody Stream',
-        url: 'https://www.youtube.com/watch?v=kBDp7CPhxy0'
-      },
-    },
-    {
-      song: {
-        title: 'Baka Mitai',
-        url: 'https://www.youtube.com/watch?v=TY-Bi6sveqg'
-      },
-    },
-    {
-      song: {
-        title: 'Gurenge',
-        url: 'https://www.youtube.com/watch?v=K1LjCn6pRxA'
-      },
-    },
-    {
-      song: {
-        title: 'Promise of the World',
-        url: 'https://www.youtube.com/watch?v=iv4ZKKahi0Q'
-      },
-    },
-    {
-      song: {
-        title: 'Dragon Night',
-        url: 'https://www.youtube.com/watch?v=jsmXFiG-e1I'
-      },
-    },
-    {
-      song: {
-        title: 'Departure',
-        url: 'https://www.youtube.com/watch?v=A_JzopQT4JU'
-      },
-    },
-    {
-      song: {
-        title: 'Odoroyo Fish',
-        url: 'https://www.youtube.com/watch?v=1lWSaWDE9m8'
-      },
-    },
-    { 
-      song: {
-        title: 'Mousou Express',
-        url: 'https://www.youtube.com/watch?v=cpEo35Ia0z8'
-      },
-    },
-    {
-      song: {
-        title: 'Chiisana Boukensha',
-        url: 'https://www.youtube.com/watch?v=Qr-XDcL8IaE'
-      },
-    },
-    {
-      song: {
-        title: 'A Cruel Angel\'s Thesis',
-        url: 'https://www.youtube.com/watch?v=xpGTZWkEFKc'
-      },
-    }
-
-  ]
-  // const songInfo = await ytdl.getInfo(args[1]);
-
-  const random = Math.floor(Math.random() * songs.length);
-  const song = songs[random].song;
-  // const song = {
-  //   title: 'Baka Mitai',
-  //   url: 'https://www.youtube.com/watch?v=Pt7KbDvUwmQ'
-  // };
-  // console.log("Song")
-  // console.log(song)
+  const random = Math.floor(Math.random() * songs[artist].length);
+  const song = songs[artist][random].song;
 
   if (!serverQueue) {
     const queueContruct = {
@@ -221,7 +135,7 @@ function play(guild, song) {
   }
 
   const dispatcher = serverQueue.connection
-    .play(ytdl(song.url))
+    .play(ytdl(song.url, {filter: 'audioonly', quality: 'highestaudio', highWaterMark: 1<<25 }), {highWaterMark: 1})
     .on("finish", () => {
       serverQueue.songs.shift();
       play(guild, serverQueue.songs[0]);
