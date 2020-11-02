@@ -90,6 +90,18 @@ const songs =
                     title: 'A Cruel Angel\'s Thesis',
                     url: 'https://www.youtube.com/watch?v=xpGTZWkEFKc'
                 },
+            },
+            {
+                song: {
+                    title: 'Cant Take My Eyes Off You',
+                    url: 'https://www.youtube.com/watch?v=Tm7JgSv3wgs'
+                },
+            },
+            {
+                song: {
+                    title: 'I See the Light',
+                    url: 'https://www.youtube.com/watch?v=LMgZ-vZ8rZY'
+                },
             }
         ],
         amelia_watson: [
