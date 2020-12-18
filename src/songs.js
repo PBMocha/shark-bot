@@ -40,7 +40,7 @@ const songs =
             {
                 song: {
                     title: 'Baka Mitai',
-                    url: 'https://www.youtube.com/watch?v=TY-Bi6sveqg'
+                    url: 'https://www.youtube.com/watch?v=Pt7KbDvUwmQ'
                 },
             },
             {
@@ -95,12 +95,6 @@ const songs =
                 song: {
                     title: 'Cant Take My Eyes Off You',
                     url: 'https://www.youtube.com/watch?v=Tm7JgSv3wgs'
-                },
-            },
-            {
-                song: {
-                    title: 'I See the Light',
-                    url: 'https://www.youtube.com/watch?v=LMgZ-vZ8rZY'
                 },
             }
         ],
